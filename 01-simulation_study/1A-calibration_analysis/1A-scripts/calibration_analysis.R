@@ -1,4 +1,4 @@
-#### Simulation Study 01 ----
+#### Simulation Study 01 A Calibration Analysis----
 
 #' Research Question: 
 #' is the most stable glinternet model, as defined by the max stability score,
@@ -27,7 +27,7 @@ library(pheatmap)
 
 n = 1000
 pk = 10
-nu_xy = 0.3
+nu_xy = 0.5
 nu_int = 0.5
 ev_xy = 0.5
 beta_abs = c(0.1,1)
