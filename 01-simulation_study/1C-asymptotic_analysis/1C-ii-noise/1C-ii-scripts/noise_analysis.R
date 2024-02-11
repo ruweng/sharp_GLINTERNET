@@ -197,7 +197,7 @@
       
       lasso_lambdahat_se <- glmnet::glmnet(xdata_int,
                                         sim_int$ydata,
-                                        lambda = lambdahat_tmp)
+                                        lambda = lambdahat_se_tmp)
       
       coef_lambdahat_se <- as.matrix(coef(lasso_lambdahat_se)[-1, ,drop = F])
       
