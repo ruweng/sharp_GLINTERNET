@@ -1,4 +1,10 @@
-#### Simulation Study 01 A Calibration Analysis----
+#### Simulation Study 01 A Calibration Analysis ----
+
+# TODO: Add FAMILY and hiernet? 
+# TODO: Add different scenarios?
+# TODO: TPR vs FPR plots across parameter combinations
+# TODO: Add cv calibration path plots
+# TODO: Add computation time
 
 #' Research Question: 
 #' is the most stable glinternet model, as defined by the max stability score,
@@ -66,8 +72,7 @@ family = "gaussian"
   set.seed(1) 
   cv <- glmnet::cv.glmnet(xdata_int,
                           sim_int$ydata, 
-                          nfolds = 10, 
-                          intercept = FALSE)
+                          nfolds = 10)
   
   saveRDS(cv, file="../1A-results/1A-models/lasso_cv.rds")
   
@@ -134,14 +139,14 @@ family = "gaussian"
   
   ## For each parameter combination [λ, π] compute Stability Score and calculate Model Performance [F1] ----
   stab_z_grid_performance <- grid_performance(stab_z,sim_int)
-  saveRDS(stab_z_grid_performance, file = "../1A-results/1A-performance/lasso_stabGridPerformance_zscore.rds")
+  saveRDS(stab_z_grid_performance, file = "../1A-results/1A-performances/lasso_stab_GridPerformance_zscore.rds")
   
   pdf(file = paste0("../1A-results/1A-figures/lasso_stabGridPerformance_zscore.pdf"), width = 14, height = 8)
   plot.grid_performance(stab_z_grid_performance)
   dev.off()
   
   stab_nll_grid_performance <- grid_performance(stab_nll,sim_int)
-  saveRDS(stab_nll_grid_performance, file = "../1A-results/1A-performance/lasso_stabGridPerformance_nll.rds")
+  saveRDS(stab_nll_grid_performance, file = "../1A-results/1A-performances/lasso_stab_GridPerformance_nll.rds")
   
   pdf(file = paste0("../1A-results/1A-figures/lasso_stabGridPerformance_nll.pdf"), width = 14, height = 8)
   plot.grid_performance(stab_nll_grid_performance)
@@ -245,14 +250,14 @@ family = "gaussian"
 
   ## For each parameter combination [λ, π] compute Stability Score and calculate Model Performance [F1] ----
   stab_z_grid_performance <- grid_performance(stab_int_z,sim_int)
-  saveRDS(stab_z_grid_performance, file = "../1A-results/1A-performance/glinternet_stabGridPerformance_zscore.rds")
+  saveRDS(stab_z_grid_performance, file = "../1A-results/1A-performances/glinternet_stab_GridPerformance_zscore.rds")
   
   pdf(file = paste0("../1A-results/1A-figures/glinternet_stabGridPerformance_zscore.pdf"), width = 14, height = 8)
   plot.grid_performance(stab_z_grid_performance)
   dev.off()
   
   stab_nll_grid_performance <- grid_performance(stab_int_nll,sim_int)
-  saveRDS(stab_nll_grid_performance, file = "../1A-results/1A-performance/glinternet_stabGridPerformance_nll.rds")
+  saveRDS(stab_nll_grid_performance, file = "../1A-results/1A-performances/glinternet_stab_GridPerformance_nll.rds")
   
   pdf(file = paste0("../1A-results/1A-figures/glinternet_stabGridPerformance_nll.pdf"), width = 14, height = 8)
   plot.grid_performance(stab_nll_grid_performance)

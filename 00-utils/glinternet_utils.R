@@ -4,6 +4,7 @@
 # TODO: update LambdaGridRegression to be able to deal with glinternet
 # TODO: clean up SampleInteraction and SimulateInteraction and make sure functionalities work
 # TODO: implement into sharp and fake
+# TODO: change 1:length to seq_len
 
 ### Simulate interactions ----
 
@@ -2611,6 +2612,46 @@ FDP <- function(selprop, PFER, pi) {
   
   return(FDP)
 }
+LambdaGridRegression <- function (xdata, ydata, tau = 0.5, seed = 1, family = "gaussian", 
+          resampling = "subsampling", Lambda_cardinal = 100, check_input = TRUE, 
+          ...) 
+{
+  Lambda <- NULL
+  pi_list <- seq(0.6, 0.9, by = 0.01)
+  K <- 100
+  n_cat <- 3
+  PFER_method <- "MB"
+  PFER_thr <- Inf
+  FDP_thr <- Inf
+  verbose <- TRUE
+  implementation <- PenalisedRegression
+  if (check_input) {
+    CheckParamRegression(Lambda = Lambda, pi_list = pi_list, 
+                         K = K, tau = tau, seed = seed, n_cat = n_cat, family = family, 
+                         implementation = implementation, resampling = resampling, 
+                         PFER_method = PFER_method, PFER_thr = PFER_thr, 
+                         FDP_thr = FDP_thr, Lambda_cardinal = Lambda_cardinal, 
+                         verbose = verbose)
+    CheckDataRegression(xdata = xdata, ydata = ydata, family = family, 
+                        verbose = verbose)
+  }
+  rm(n_cat)
+  rm(Lambda)
+  rm(pi_list)
+  rm(K)
+  withr::local_seed(1)
+  s <- Resample(data = ydata, family = family, tau = tau, 
+                resampling = resampling, ...)
+  withr::local_seed(1)
+  mycv <- glmnet::glmnet(x = xdata[s, ], y = ydata[s, ], family = family, 
+                         ...)
+  Lambda <- cbind(LambdaSequence(lmax = max(mycv$lambda), 
+                                 lmin = min(mycv$lambda), cardinal = Lambda_cardinal))
+  Lambda <- as.matrix(stats::na.exclude(Lambda))
+  rownames(Lambda) <- paste0("s", seq(0, nrow(Lambda) - 1))
+  return(Lambda)
+}
+
 
 LambdaSequence <- function(lmax, lmin, cardinal = 100) {
   return(exp(seq(log(lmax), log(lmin), length.out = cardinal)))
