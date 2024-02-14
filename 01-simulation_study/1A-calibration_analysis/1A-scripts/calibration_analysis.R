@@ -43,8 +43,8 @@ family = "gaussian"
 
 ### Simulate Regression with Pairwise Interaction Effects ----
   set.seed(1) # set seed for reproducibility
-  sim_int <- SimulateInteraction(n = n, # observations
-                                 pk = pk, # main effect variables
+  sim_int <- SimulateInteraction(n = n, # number of observations
+                                 pk = pk, # number of variables variables
                                  nu_xy = nu_xy, # expected probability of true main effect
                                  nu_int = nu_int, # expected probability of interaction effect
                                  ev_xy = ev_xy, # expected proportion of variance explained by true predictors 

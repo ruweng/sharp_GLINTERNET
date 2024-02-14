@@ -10,7 +10,10 @@
 
 SampleInteractions <- function(xdata, theta, q = NULL,
                                nu_int = 0.1,
-                               beta_abs = c(0.1, 1), beta_sign = c(-1, 1), continuous = TRUE, 
+                               beta_abs = c(0.1, 1),
+                               beta_abs_int = NULL,
+                               beta_sign = c(-1, 1),
+                               continuous = TRUE, 
                                hierarchy = "strong"){
   
   # Definition of number of outcome variables
@@ -77,13 +80,17 @@ SampleInteractions <- function(xdata, theta, q = NULL,
     
     
     # Sampling interaction coefficients if interactions are present
+    if(is.null(beta_abs_int)){
+      beta_abs_int <- beta_abs
+    }
+      
     int_table[[k]]["beta"] <- int_table[[k]]["theta"]
     if (continuous){
-      int_table[[k]]["beta"] <- int_table[[k]]["beta"] * matrix(stats::runif(n = nrow(int_table[[k]]["beta"]), min = min(beta_abs), max = max(beta_abs)),
+      int_table[[k]]["beta"] <- int_table[[k]]["beta"] * matrix(stats::runif(n = nrow(int_table[[k]]["beta"]), min = min(beta_abs_int), max = max(beta_abs_int)),
                                                                 nrow = nrow(int_table[[k]]["beta"])
       )
     } else {
-      int_table[[k]]["beta"] <- int_table[[k]]["beta"] * matrix(base::sample(beta_abs, size = nrow(int_table[[k]]["beta"]), replace = TRUE),
+      int_table[[k]]["beta"] <- int_table[[k]]["beta"] * matrix(base::sample(beta_abs_int, size = nrow(int_table[[k]]["beta"]), replace = TRUE),
                                                                 nrow = nrow(int_table[[k]]["beta"])
       )
     }
@@ -111,7 +118,10 @@ SampleInteractions <- function(xdata, theta, q = NULL,
                                 family = "gaussian", q = 1,
                                 theta = NULL, nu_xy = 0.2,
                                 nu_int = 1, hierarchy = "strong",
-                                beta_abs = c(0.1, 1), beta_sign = c(-1, 1), continuous = TRUE,
+                                beta_abs = c(0.1, 1),
+                                beta_abs_int = NULL,
+                                beta_sign = c(-1, 1),
+                                continuous = TRUE,
                                 ev_xy = 0.7) {
   
   # TODO in future versions: introduce more families ("multinomial" and "cox")
@@ -196,7 +206,7 @@ SampleInteractions <- function(xdata, theta, q = NULL,
   
   # Sampling random network of pairwise interactions and interaction coefficients
   int <- SampleInteractions(xdata = xdata, theta = theta, q = q, nu_int = nu_int, hierarchy = hierarchy,
-                            beta_abs = beta_abs, beta_sign = beta_sign, continuous = continuous)
+                            beta_abs = beta_abs, beta_abs_int = beta_abs_int, beta_sign = beta_sign, continuous = continuous)
   
   # Sampling outcome data
   ydata <- matrix(NA, ncol = q, nrow = nrow(xdata))

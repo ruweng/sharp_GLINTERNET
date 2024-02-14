@@ -29,7 +29,7 @@
 ## Parameters
   
   n <- 1000 # observations
-  pk <- c(10, 50, 100) # number of variables
+  pk <- c(50, 100) # number of variables
   ev_xy <- seq(0.5, 0.05, by = -0.05)# expected proportion of explained variance
   k <- 1:100 # iterations
   
@@ -52,9 +52,9 @@
     set.seed(k_tmp)
     
     # Simulate data
-    sim_int <- SimulateInteraction(n = n_tmp,
-                                   pk = pk_tmp,
-                                   ev_xy = ev_xy_tmp,
+    sim_int <- SimulateInteraction(n = n_tmp, # number of observations
+                                   pk = pk_tmp, # number of variables
+                                   ev_xy = ev_xy_tmp, # expected proportion of variance explained by true predictors 
                                    nu_xy = 0.1, # expected probability of true main effect
                                    nu_int = 0.3, # expected probability of interaction effect
                                    hierarchy = "strong", # interactions only between true main effects
@@ -212,7 +212,7 @@
                                 stab_theta_z,
                                 stab_theta_nll,
                                 cv_theta_lambdahat,
-                                cv_theta_lambdahat_sd,
+                                cv_theta_lambdahat_se,
                                 stab_int_theta_nll,
                                 stab_int_theta_z,
                                 cv_int_theta_lambdahat,
@@ -315,7 +315,7 @@ iterate <- function(params_grid, n_cores, node){
                                      stab_theta_z = stab_theta_z,
                                      stab_theta_nll = stab_theta_nll,
                                      cv_theta_lambdahat = cv_theta_lambdahat,
-                                     cv_theta_lambdahat_sd = cv_theta_lambdahat_sd,
+                                     cv_theta_lambdahat_se = cv_theta_lambdahat_se,
                                      stab_int_theta_z = stab_int_theta_z,
                                      stab_int_theta_nll = stab_int_theta_nll,
                                      cv_int_theta_lambdahat = cv_int_theta_lambdahat,
